@@ -1,0 +1,8 @@
+<launch>
+  <!-- planner -->
+  <node pkg="global_planner" type="planner" name="global_planner">
+  <!--remap from="/global_planner/goal" to="/move_base_simple/goal"/-->
+  <rosparam file="/home/enzo/catkin_ws/src/master_project/config/costmap_common_params.yaml" command="load" />
+  <rosparam file="/home/enzo/catkin_ws/src/master_project/config/global_costmap_params.yaml" command="load" />
+  </node>
+</launch>
