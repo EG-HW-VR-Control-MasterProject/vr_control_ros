@@ -48,10 +48,12 @@ class Distance_estimation():
 		self.markerPub = rospy.Publisher('/robotMarker', Marker, queue_size=1)
 		self.markerMeanPub = rospy.Publisher('/robotMeanMarker', Marker, queue_size=1)
 		self.img = rospy.Publisher('/image_rectangle', Image, queue_size=10)
+		self.id_list_pub = rospy.Publisher('/item/id_list', String, queue_size=10)
 
 		self.image_message = Image()
 		self.image = np.zeros((384, 384, 1), np.uint8)
 		self.count = 0
+		self.updatedIdList = String()
 
 		self.current_time = rospy.get_rostime()
 		self.passed_time = rospy.get_rostime()
@@ -377,8 +379,14 @@ class Distance_estimation():
 					self.robotMarker.id = self.image_person
 				else:
 					self.robotMarker.id = self.injured
-
+			# Publish the Mean Marker
 			self.markerMeanPub.publish(self.robotMarker)
+
+			# Update the list of items
+			self.updatedIdList.data += "-" + str(self.robotMarker.id)
+
+			# Publish the updated list
+			self.id_list_pub.publish(self.updatedIdList)
 			print('List published so cleaned')
 			#del self.listMeanMarker[:]
 			self.listMeanMarker *= 0
